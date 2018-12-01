@@ -10,6 +10,12 @@ class Game {
       this.map = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
   }
 
+  draw(){
+      this.drawBackground();
+      this.drawOffer();
+      this.drawMap();
+  }
+  
   drawBackground() {
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
