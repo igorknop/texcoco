@@ -1,13 +1,48 @@
+const Area = require("./Area");
+
 const OFFER_SIZE = 55;
 const OFFER_GAP = 5;
+const OFFER_W = 4;
+const OFFER_H = 3;
 const TOP = 90;
+
+const AREA_W = 4;
+const AREA_H = 4;
 
 class Game {
   constructor(canvas) {
     this.canvas = canvas;
+    this.offer = [];
+    this.area = [];
     this.ctx = canvas.getContext("2d");
-    this.offer = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
-    this.map = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+    for (let l = 0; l < OFFER_H; l++) {
+      this.offer[l] = [];
+      for (let c = 0; c < OFFER_W; c++) {
+        this.offer[l][c] = new Area(
+          this,
+          this.canvas.width / 2 -
+            (OFFER_SIZE + OFFER_GAP) * 2 +
+            c * (OFFER_SIZE + OFFER_GAP),
+          l * (OFFER_SIZE + OFFER_GAP) + TOP,
+          OFFER_SIZE,
+          OFFER_SIZE
+        );
+      }
+    }
+    for (let l = 0; l < AREA_H; l++) {
+      this.area[l] = [];
+      for (let c = 0; c < AREA_W; c++) {
+        this.area[l][c] = new Area(
+          this,
+          this.canvas.width / 2 -
+            (OFFER_SIZE + OFFER_GAP) * 2 +
+            c * (OFFER_SIZE + OFFER_GAP),
+          (OFFER_SIZE + OFFER_GAP) * (l + 4) + TOP,
+          OFFER_SIZE,
+          OFFER_SIZE
+        );
+      }
+    }
   }
 
   draw() {
@@ -26,12 +61,10 @@ class Game {
     for (let l = 0; l < this.offer.length; l++) {
       for (let c = 0; c < this.offer[0].length; c++) {
         this.ctx.strokeRect(
-          this.canvas.width / 2 -
-            (OFFER_SIZE + OFFER_GAP) * 2 +
-            c * (OFFER_SIZE + OFFER_GAP),
-          l * (OFFER_SIZE + OFFER_GAP) + TOP,
-          OFFER_SIZE,
-          OFFER_SIZE
+          this.offer[l][c].x,
+          this.offer[l][c].y,
+          this.offer[l][c].w,
+          this.offer[l][c].h
         );
       }
     }
@@ -39,15 +72,13 @@ class Game {
 
   drawMap() {
     this.ctx.strokeStyle = "yellow";
-    for (let l = 0; l < this.map.length; l++) {
-      for (let c = 0; c < this.map[0].length; c++) {
+    for (let l = 0; l < this.area.length; l++) {
+      for (let c = 0; c < this.area[0].length; c++) {
         this.ctx.strokeRect(
-          this.canvas.width / 2 -
-            (OFFER_SIZE + OFFER_GAP) * 2 +
-            c * (OFFER_SIZE + OFFER_GAP),
-          (OFFER_SIZE + OFFER_GAP) * (l + 4) + TOP,
-          OFFER_SIZE,
-          OFFER_SIZE
+          this.area[l][c].x,
+          this.area[l][c].y,
+          this.area[l][c].w,
+          this.area[l][c].h
         );
       }
     }
@@ -56,10 +87,10 @@ class Game {
   setupControls() {
     var that = this;
     window.addEventListener("keydown", function(e) {
-//      console.log(e.keyCode);
+      //      console.log(e.keyCode);
     });
     window.addEventListener("keyup", function(e) {
-//      console.log(e.keyCode);
+      //      console.log(e.keyCode);
     });
     window.addEventListener(
       "click",
@@ -76,8 +107,8 @@ class Game {
         }
         var x = e.pageX - offsetX;
         var y = e.pageY - offsetY;
-//        console.log("click", e.pageX, e.pageY);
-//        console.log("offset", x, y);
+        //        console.log("click", e.pageX, e.pageY);
+        //        console.log("offset", x, y);
         that.handleClick(x, y);
       },
       false
