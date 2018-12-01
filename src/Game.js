@@ -14,11 +14,12 @@ class Game {
     this.canvas = canvas;
     this.offer = [];
     this.area = [];
+    this.allAreas = [];
     this.ctx = canvas.getContext("2d");
     for (let l = 0; l < OFFER_H; l++) {
       this.offer[l] = [];
       for (let c = 0; c < OFFER_W; c++) {
-        this.offer[l][c] = new Area(
+        let newArea = new Area(
           this,
           this.canvas.width / 2 -
             (OFFER_SIZE + OFFER_GAP) * 2 +
@@ -27,12 +28,14 @@ class Game {
           OFFER_SIZE,
           OFFER_SIZE
         );
+        this.offer[l][c] = newArea;
+        this.allAreas.push(newArea);
       }
     }
     for (let l = 0; l < AREA_H; l++) {
       this.area[l] = [];
       for (let c = 0; c < AREA_W; c++) {
-        this.area[l][c] = new Area(
+        let newArea = new Area(
           this,
           this.canvas.width / 2 -
             (OFFER_SIZE + OFFER_GAP) * 2 +
@@ -41,6 +44,9 @@ class Game {
           OFFER_SIZE,
           OFFER_SIZE
         );
+
+        this.area[l][c] = newArea;
+        this.allAreas.push(newArea);
       }
     }
   }
@@ -57,9 +63,13 @@ class Game {
   }
 
   drawOffer() {
-    this.ctx.strokeStyle = "white";
     for (let l = 0; l < this.offer.length; l++) {
       for (let c = 0; c < this.offer[0].length; c++) {
+        if (this.offer[l][c].selected) {
+          this.ctx.strokeStyle = "red";
+        } else {
+          this.ctx.strokeStyle = "white";
+        }
         this.ctx.strokeRect(
           this.offer[l][c].x,
           this.offer[l][c].y,
@@ -71,9 +81,13 @@ class Game {
   }
 
   drawMap() {
-    this.ctx.strokeStyle = "yellow";
     for (let l = 0; l < this.area.length; l++) {
       for (let c = 0; c < this.area[0].length; c++) {
+        if (this.area[l][c].selected) {
+          this.ctx.strokeStyle = "green";
+        } else {
+          this.ctx.strokeStyle = "yellow";
+        }
         this.ctx.strokeRect(
           this.area[l][c].x,
           this.area[l][c].y,
@@ -126,6 +140,12 @@ class Game {
     this.ctx.stroke();
   }
   handleClick(x, y) {
+    this.allAreas.forEach(area => {
+      if (area.isInside(x, y)) {
+        area.selected = !area.selected;
+      }
+    });
+    this.draw();
     this.drawCrossChair(x, y);
   }
 }
