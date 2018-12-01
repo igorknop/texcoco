@@ -12,4 +12,5 @@ const canvas = component();
 const game = new Game(canvas);
 
 document.body.appendChild(canvas);
+game.setupControls();
 game.draw();
