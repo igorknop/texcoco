@@ -1,26 +1,14 @@
 import { Game } from "./Game";
 import { createStore } from "redux";
-import { TexcocoApp } from "./TexcocoApp.js";
+import { TexcocoApp, TEXCOCO } from "./TexcocoApp.js";
 
 function component() {
   let element = document.createElement("canvas");
-  element.width = 420;
-  element.height = 600;
+  element.width = Math.min(window.innerWidth, TEXCOCO.WIDTH);
+  element.height = Math.min(window.innerHeight, TEXCOCO.HEIGHT);
   return element;
 }
 
-function texcoco(state = { t: 0 }, action) {
-  switch (action.type) {
-    case "A":
-      return Object.assign({}, state, { t: state.t + 1 });
-      break;
-    case "B":
-      return Object.assign({}, state, { t: state.t - 1 });
-      break;
-    default:
-      return state;
-  }
-}
 let canvas = component();
 document.body.appendChild(canvas);
 

@@ -45,23 +45,14 @@ function newTexcocoState() {
     state.offer[l] = [];
     for (let c = 0; c < TEXCOCO.OFFER_W; c++) {
       let newArea = new Area(
-        state.width / 2 -
-          (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP) * 2 +
-          c * (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP),
-        l * (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP) + TEXCOCO.TOP,
-        TEXCOCO.OFFER_SIZE,
-        TEXCOCO.OFFER_SIZE
-      );
+        Math.round((state.width - (TEXCOCO.OFFER_SIZE * TEXCOCO.OFFER_W + (TEXCOCO.OFFER_W-1)*TEXCOCO.OFFER_GAP))/3 + c * (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP)), l * (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP) + TEXCOCO.TOP, TEXCOCO.OFFER_SIZE, TEXCOCO.OFFER_SIZE);
       state.offer[l][c] = newArea;
     }
   }
   for (let l = 0; l < TEXCOCO.AREA_H; l++) {
     state.area[l] = [];
     for (let c = 0; c < TEXCOCO.AREA_W; c++) {
-      let newArea = new Area(
-        state.width / 2 -
-          (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP) * 2 +
-          c * (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP),
+      let newArea = new Area(Math.round((state.width - (TEXCOCO.OFFER_SIZE * TEXCOCO.OFFER_W + (TEXCOCO.OFFER_W - 1) * TEXCOCO.OFFER_GAP)) / 3 + c * (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP)),
         (TEXCOCO.OFFER_SIZE + TEXCOCO.OFFER_GAP) * (l + 4) + TEXCOCO.TOP,
         TEXCOCO.OFFER_SIZE,
         TEXCOCO.OFFER_SIZE

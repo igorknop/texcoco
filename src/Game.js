@@ -8,6 +8,8 @@ export class Game {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.setState(TexcocoApp());
+    this.state.width = canvas.width;
+    this.state.height = canvas.height;
   }
 
   setState(state) {
