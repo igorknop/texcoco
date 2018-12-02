@@ -71,7 +71,7 @@ export class Game {
     }
   }
 
-  setupControls() {
+  setupControls(store) {
     var that = this;
     window.addEventListener("keydown", function(e) {
       //      console.log(e.keyCode);
@@ -96,7 +96,8 @@ export class Game {
         var y = e.pageY - offsetY;
         //        console.log("click", e.pageX, e.pageY);
         //        console.log("offset", x, y);
-        that.handleClick(x, y);
+        //that.handleClick(x, y);
+        store.dispatch({ type: "CLICK", x: x, y: y });
       },
       false
     );

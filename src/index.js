@@ -35,5 +35,3 @@ store.subscribe(() => {
 game.setupControls(store);
 
 store.dispatch({ type: "RESET" });
-store.dispatch({ type: "CLICK", x:150, y:450 });
-store.dispatch({ type: "CLICK", x:150, y:150 });
