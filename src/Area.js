@@ -1,10 +1,9 @@
-class Area {
-  constructor(game, x, y, w, h) {
+export class Area {
+  constructor(x, y, w, h) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
-    this.game = game;
     this.selected = false;
   }
   isInside(x, y) {
@@ -15,5 +14,3 @@ class Area {
     return true;
   }
 }
-
-module.exports = Area;

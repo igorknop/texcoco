@@ -1,52 +1,25 @@
-const Area = require("./Area");
+import { Area } from "./Area";
+import { TexcocoApp, TEXCOCO } from "./TexcocoApp.js";
 
-const OFFER_SIZE = 55;
-const OFFER_GAP = 5;
-const OFFER_W = 4;
-const OFFER_H = 3;
-const TOP = 90;
-
-const AREA_W = 4;
-const AREA_H = 4;
-
-class Game {
+export class Game {
   constructor(canvas) {
-    this.canvas = canvas;
-    this.offer = [];
-    this.area = [];
+    this.state = null;
     this.allAreas = [];
+    this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
-    for (let l = 0; l < OFFER_H; l++) {
-      this.offer[l] = [];
-      for (let c = 0; c < OFFER_W; c++) {
-        let newArea = new Area(
-          this,
-          this.canvas.width / 2 -
-            (OFFER_SIZE + OFFER_GAP) * 2 +
-            c * (OFFER_SIZE + OFFER_GAP),
-          l * (OFFER_SIZE + OFFER_GAP) + TOP,
-          OFFER_SIZE,
-          OFFER_SIZE
-        );
-        this.offer[l][c] = newArea;
-        this.allAreas.push(newArea);
+    this.setState(TexcocoApp());
+  }
+
+  setState(state) {
+    this.state = state;
+    for (let l = 0; l < state.offer.length; l++) {
+      for (let c = 0; c < state.offer[0].length; c++) {
+        this.allAreas.push(state.offer[l][c]);
       }
     }
-    for (let l = 0; l < AREA_H; l++) {
-      this.area[l] = [];
-      for (let c = 0; c < AREA_W; c++) {
-        let newArea = new Area(
-          this,
-          this.canvas.width / 2 -
-            (OFFER_SIZE + OFFER_GAP) * 2 +
-            c * (OFFER_SIZE + OFFER_GAP),
-          (OFFER_SIZE + OFFER_GAP) * (l + 4) + TOP,
-          OFFER_SIZE,
-          OFFER_SIZE
-        );
-
-        this.area[l][c] = newArea;
-        this.allAreas.push(newArea);
+    for (let l = 0; l < state.area.length; l++) {
+      for (let c = 0; c < state.area[0].length; c++) {
+        this.allAreas.push(state.area[l][c]);
       }
     }
   }
@@ -63,36 +36,36 @@ class Game {
   }
 
   drawOffer() {
-    for (let l = 0; l < this.offer.length; l++) {
-      for (let c = 0; c < this.offer[0].length; c++) {
-        if (this.offer[l][c].selected) {
+    for (let l = 0; l < this.state.offer.length; l++) {
+      for (let c = 0; c < this.state.offer[0].length; c++) {
+        if (this.state.offer[l][c].selected) {
           this.ctx.strokeStyle = "red";
         } else {
           this.ctx.strokeStyle = "white";
         }
         this.ctx.strokeRect(
-          this.offer[l][c].x,
-          this.offer[l][c].y,
-          this.offer[l][c].w,
-          this.offer[l][c].h
+          this.state.offer[l][c].x,
+          this.state.offer[l][c].y,
+          this.state.offer[l][c].w,
+          this.state.offer[l][c].h
         );
       }
     }
   }
 
   drawMap() {
-    for (let l = 0; l < this.area.length; l++) {
-      for (let c = 0; c < this.area[0].length; c++) {
-        if (this.area[l][c].selected) {
+    for (let l = 0; l < this.state.area.length; l++) {
+      for (let c = 0; c < this.state.area[0].length; c++) {
+        if (this.state.area[l][c].selected) {
           this.ctx.strokeStyle = "green";
         } else {
           this.ctx.strokeStyle = "yellow";
         }
         this.ctx.strokeRect(
-          this.area[l][c].x,
-          this.area[l][c].y,
-          this.area[l][c].w,
-          this.area[l][c].h
+          this.state.area[l][c].x,
+          this.state.area[l][c].y,
+          this.state.area[l][c].w,
+          this.state.area[l][c].h
         );
       }
     }
@@ -148,6 +121,25 @@ class Game {
     this.draw();
     this.drawCrossChair(x, y);
   }
+  static handleClick2(state, x, y) {
+    let newState = Object.assign(Object.create(state), state);
+    
+    state.offer.forEach((line, l) =>
+      line.forEach((area, c) => {
+        if (area.isInside(x, y)) {
+          newState.offer[l][c].selected = !state.offer[l][c].selected;
+          return newState;
+        }
+      })
+    );
+    state.area.forEach((line, l) =>
+      line.forEach((area, c) => {
+        if (area.isInside(x, y)) {
+          newState.area[l][c].selected = !state.area[l][c].selected;
+          return newState;
+        }
+      })
+    );
+    return newState;
+  }
 }
-
-module.exports.Game = Game;

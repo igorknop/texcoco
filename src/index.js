@@ -1,9 +1,10 @@
 import { Game } from "./Game";
 import { createStore } from "redux";
+import { TexcocoApp } from "./TexcocoApp.js";
 
 function component() {
   let element = document.createElement("canvas");
-  element.width = 320;
+  element.width = 420;
   element.height = 600;
   return element;
 }
@@ -20,17 +21,19 @@ function texcoco(state = { t: 0 }, action) {
       return state;
   }
 }
-
-let store = createStore(texcoco);
-store.subscribe(() => console.log(store.getState()));
-store.dispatch({ type: "A" });
-store.dispatch({ type: "B" });
-store.dispatch({ type: "A" });
-
-const canvas = component();
-
-const game = new Game(canvas);
-
+let canvas = component();
 document.body.appendChild(canvas);
-game.setupControls();
-game.draw();
+
+let game = new Game(canvas);
+let store = createStore(TexcocoApp);
+store.subscribe(() => {
+  let state = store.getState();
+  game.setState(state);
+  game.draw();
+});
+
+game.setupControls(store);
+
+store.dispatch({ type: "RESET" });
+store.dispatch({ type: "CLICK", x:150, y:450 });
+store.dispatch({ type: "CLICK", x:150, y:150 });
